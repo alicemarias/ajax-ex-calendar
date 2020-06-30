@@ -6,7 +6,7 @@ $(document).ready(function()
     month: 0,
     year: 2018
   });
-
+  // stampo giorni del mese
   //  numero giorni di Gennaio
   var numberOfDays = baseDate.daysInMonth();
 
@@ -31,4 +31,36 @@ $(document).ready(function()
     $('#lista-giorni').append(html);
   }
 
+    // aggiungo festivita
+    function stampoFestivita(baseDate) {
+      $.ajax(
+      {
+        url: 'https://flynn.boolean.careers/exercises/api/holidays',
+        method: 'GET',
+        data: {
+          year: baseDate.year(),
+          month: baseDate.month(),
+        },
+        success: function(dataResponse){
+          var holidays = dataResponse.response;
+
+          for(var i = 0; i < holidays.length; i++){
+            var currentHoliday = holidays[i];
+
+            var thisDateElem = $('.day[data-current-day ="' + currentHoliday.date + '"]');
+            thisDateElem.addClass('holiday');
+            thisDateElem.append('-' + currentHoliday.name);
+
+          }
+        },
+        error: function() {
+          alert("errore");
+        }
+
+
+
+
+
+      })
+    }
 });
